@@ -34,19 +34,40 @@ for url in imdb_url_list:
 
     episode_title_html = friends_soup.find_all('div', {"class": "ipc-title__text"})
     episode_rating_html = friends_soup.find_all('span', {"class": "ipc-rating-star ipc-rating-star--base ipc-rating-star--imdb ratingGroup--imdb-rating"})
+    episode_air_date_html = friends_soup.find_all('span', {"class": "sc-9115db22-10 fyHWhz"})
+    episode_description_html = friends_soup.find_all('div', {"class": "ipc-html-content-inner-div"})
     
 
     episode_title_list = []
     for url in episode_title_html:
         episode_title_list.append(url.getText())
     
-    episode_title.extend(episode_title_list)
+    episode_rating_list = []
+    for url in episode_rating_html:
+        episode_rating_list.append(url.getText())
+
+    episode_air_date_list = []
+    for url in episode_air_date_html:
+        episode_air_date_list.append(url.getText())
     
-    df = pd.DataFrame({
-        'title': episode_title
-    })
+    episode_description_list = []
+    for url in episode_description_html:
+        episode_description_list.append(url.getText())
+    
+    episode_title.extend(episode_title_list)
+    episode_rating.extend(episode_rating_list)
+    episode_air_date.extend(episode_air_date_list)
+    episode_description.extend(episode_description_list)
+    
+df = pd.DataFrame({
+    'title': episode_title,
+    'rating': episode_rating,
+    'description': episode_description,
+    'air_date': episode_air_date
+})
 
-# df.to_csv('test', index=False)
+csv_file = 'friends_initial.csv'
+df.to_csv(csv_file, index=False)
 
-# print(df)
+print(f'All data has been saved to {csv_file}')
 
